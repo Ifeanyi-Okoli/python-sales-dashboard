@@ -3,6 +3,12 @@ import pandas as pd
 import plotly.express as px
 from io import StringIO
 
+if "datasets" not in st.session_state:
+    st.session_state.datasets = {}
+
+if "current_dataset" not in st.session_state:
+    st.session_state.current_dataset = None
+
 # ---------- HELPER FUNCTIONS ----------
 def generate_insights(df):
     insights = []
@@ -39,13 +45,31 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-    # Load file
+
     if uploaded_file.name.endswith(".csv"):
         df = pd.read_csv(uploaded_file)
     else:
         df = pd.read_excel(uploaded_file)
 
-    st.success("File uploaded successfully!")
+    # Save dataset in session
+    st.session_state.datasets[uploaded_file.name] = df
+    st.session_state.current_dataset = uploaded_file.name
+
+    st.success(f"{uploaded_file.name} uploaded and stored!")
+
+if st.session_state.datasets:
+
+    st.subheader("Saved Datasets")
+
+    selected_dataset = st.selectbox(
+        "Switch Dataset",
+        list(st.session_state.datasets.keys())
+    )
+
+    df = st.session_state.datasets[selected_dataset]
+    cleaned_df = df.copy()
+
+    st.info(f"Currently viewing: {selected_dataset}")
 
     # ---------- DATA PREVIEW ----------
     st.subheader("Original Data Preview")
