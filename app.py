@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 st.title("Sales Data Analysis Dashboard")
 
@@ -9,7 +10,6 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-
     # Load file
     if uploaded_file.name.endswith(".csv"):
         df = pd.read_csv(uploaded_file)
@@ -26,13 +26,10 @@ if uploaded_file is not None:
     st.subheader("Dataset Summary")
 
     col1, col2, col3 = st.columns(3)
-
     with col1:
         st.metric("Rows", df.shape[0])
-
     with col2:
         st.metric("Columns", df.shape[1])
-
     with col3:
         st.metric("Missing Values", df.isnull().sum().sum())
 
@@ -53,11 +50,9 @@ if uploaded_file is not None:
         st.info("Duplicates removed.")
 
     if fill_missing:
-        # Fill numeric columns with mean
         numeric_cols = cleaned_df.select_dtypes(include=["number"]).columns
         cleaned_df[numeric_cols] = cleaned_df[numeric_cols].fillna(cleaned_df[numeric_cols].mean())
 
-        # Fill text columns with mode
         text_cols = cleaned_df.select_dtypes(include=["object"]).columns
         for col in text_cols:
             cleaned_df[col] = cleaned_df[col].fillna(cleaned_df[col].mode()[0])
@@ -74,11 +69,53 @@ if uploaded_file is not None:
 
     # ---------- BEFORE VS AFTER ----------
     st.subheader("Data Comparison")
-
     col1, col2 = st.columns(2)
-
     with col1:
         st.metric("Original Rows", df.shape[0])
-
     with col2:
         st.metric("Cleaned Rows", cleaned_df.shape[0])
+
+    # ---------- VISUALIZATION SECTION ----------
+    st.subheader("Data Visualisation")
+
+    st.write("Create charts from your dataset")
+
+    columns = cleaned_df.columns.tolist()
+
+    col1, col2 = st.columns(2)
+    with col1:
+        x_axis = st.selectbox("Select X-axis", columns, key="x_axis")
+    with col2:
+        chart_type = st.selectbox(
+            "Select Chart Type",
+            ["Bar Chart", "Line Chart", "Histogram", "Pie Chart"],
+            key="chart_type"
+        )
+
+    y_axis = None
+    if chart_type != "Pie Chart":
+        y_axis = st.selectbox("Select Y-axis", columns, key="y_axis")
+
+    # ---------- CHART GENERATION ----------
+    try:
+        if chart_type == "Bar Chart" and y_axis:
+            fig = px.bar(cleaned_df, x=x_axis, y=y_axis)
+            st.plotly_chart(fig, use_container_width=True)
+
+        elif chart_type == "Line Chart" and y_axis:
+            fig = px.line(cleaned_df, x=x_axis, y=y_axis)
+            st.plotly_chart(fig, use_container_width=True)
+
+        elif chart_type == "Histogram":
+            fig = px.histogram(cleaned_df, x=x_axis)
+            st.plotly_chart(fig, use_container_width=True)
+
+        elif chart_type == "Pie Chart":
+            fig = px.pie(cleaned_df, names=x_axis)
+            st.plotly_chart(fig, use_container_width=True)
+
+    except Exception as e:
+        st.error(f"Cannot generate chart: {e}")
+
+else:
+    st.info("👆 Please upload a CSV or Excel file to begin analysis.")
