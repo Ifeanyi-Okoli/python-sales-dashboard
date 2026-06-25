@@ -2,6 +2,22 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+def generate_insights(df):
+    insights = []
+    missing = df.isnull().sum().sum()
+    if missing > 0:
+        insights.append(f"Dataset contains {missing} missing values which may affect analysis.")
+
+    numeric_cols = df.select_dtypes(include=["number"]).columns
+    if len(numeric_cols) > 0:
+        for col in numeric_cols:
+            max_val = df[col].max()
+            min_val = df[col].min()
+            insights.append(f"Column '{col}' ranges from {min_val} to {max_val}.")
+
+    insights.append(f"The dataset contains {df.shape[0]} rows and {df.shape[1]} columns.")
+    return insights
+
 st.title("Sales Data Analysis Dashboard")
 
 uploaded_file = st.file_uploader(
@@ -24,7 +40,6 @@ if uploaded_file is not None:
 
     # ---------- SUMMARY ----------
     st.subheader("Dataset Summary")
-
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Rows", df.shape[0])
@@ -38,7 +53,6 @@ if uploaded_file is not None:
 
     # ---------- CLEANING OPTIONS ----------
     st.subheader("Data Cleaning Options")
-
     remove_duplicates = st.checkbox("Remove Duplicates")
     fill_missing = st.checkbox("Fill Missing Values")
     drop_missing_rows = st.checkbox("Drop Rows with Missing Values")
@@ -56,7 +70,6 @@ if uploaded_file is not None:
         text_cols = cleaned_df.select_dtypes(include=["object"]).columns
         for col in text_cols:
             cleaned_df[col] = cleaned_df[col].fillna(cleaned_df[col].mode()[0])
-
         st.info("Missing values filled.")
 
     if drop_missing_rows:
@@ -77,7 +90,6 @@ if uploaded_file is not None:
 
     # ---------- VISUALIZATION SECTION ----------
     st.subheader("Data Visualisation")
-
     st.write("Create charts from your dataset")
 
     columns = cleaned_df.columns.tolist()
@@ -96,6 +108,12 @@ if uploaded_file is not None:
     if chart_type != "Pie Chart":
         y_axis = st.selectbox("Select Y-axis", columns, key="y_axis")
 
+    # ---------- AUTOMATED INSIGHTS ----------
+    st.subheader("Automated Business Insights")
+    insights = generate_insights(cleaned_df)
+    for i, insight in enumerate(insights, 1):
+        st.write(f"🔹 {insight}")
+
     # ---------- CHART GENERATION ----------
     try:
         if chart_type == "Bar Chart" and y_axis:
@@ -113,7 +131,6 @@ if uploaded_file is not None:
         elif chart_type == "Pie Chart":
             fig = px.pie(cleaned_df, names=x_axis)
             st.plotly_chart(fig, use_container_width=True)
-
     except Exception as e:
         st.error(f"Cannot generate chart: {e}")
 
