@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from io import StringIO
 
+# ---------- HELPER FUNCTIONS ----------
 def generate_insights(df):
     insights = []
     missing = df.isnull().sum().sum()
@@ -18,6 +20,17 @@ def generate_insights(df):
     insights.append(f"The dataset contains {df.shape[0]} rows and {df.shape[1]} columns.")
     return insights
 
+def convert_df_to_csv(df):
+    return df.to_csv(index=False).encode('utf-8')
+
+def generate_insights_report(insights):
+    report = "BUSINESS INSIGHTS REPORT\n"
+    report += "=" * 40 + "\n\n"
+    for i, item in enumerate(insights, 1):
+        report += f"{i}. {item}\n"
+    return report
+
+# ====================== MAIN APP ======================
 st.title("Sales Data Analysis Dashboard")
 
 uploaded_file = st.file_uploader(
@@ -114,7 +127,30 @@ if uploaded_file is not None:
     for i, insight in enumerate(insights, 1):
         st.write(f"🔹 {insight}")
 
+    # ---------- EXPORT SECTION ----------
+    st.subheader("Export Reports")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        csv_data = convert_df_to_csv(cleaned_df)
+        st.download_button(
+            label="⬇️ Download Cleaned Data (CSV)",
+            data=csv_data,
+            file_name="cleaned_data.csv",
+            mime="text/csv"
+        )
+
+    with col2:
+        report = generate_insights_report(insights)
+        st.download_button(
+            label="📄 Download Insights Report",
+            data=report,
+            file_name="business_insights.txt",
+            mime="text/plain"
+        )
+
     # ---------- CHART GENERATION ----------
+    st.subheader("Generated Chart")
     try:
         if chart_type == "Bar Chart" and y_axis:
             fig = px.bar(cleaned_df, x=x_axis, y=y_axis)
