@@ -7,3 +7,6 @@ def initialize_session():
 
     if "current_dataset" not in st.session_state:
         st.session_state.current_dataset = None
+
+    if "cleaned_df" not in st.session_state:
+        st.session_state.cleaned_df = None
