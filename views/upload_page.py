@@ -25,8 +25,14 @@ def show_upload_page():
             uploaded_file.name
         )
 
+        save_analysis(
+            filename=uploaded_file.name,
+            rows=df.shape[0],
+            columns=df.shape[1]
+        )
+
         st.success(
-            f"{uploaded_file.name} uploaded."
+            f"{uploaded_file.name} uploaded successfully."
         )
         
 
