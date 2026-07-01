@@ -6,6 +6,8 @@ from utils.session_manager import (
     initialize_session
 )
 
+from views.dashboard_page import show_dashboard_page
+
 from views.upload_page import (
     show_upload_page
 )
@@ -35,30 +37,45 @@ initialize_session()
 
 create_tables()
 
-st.title("Sales Data Analysis Dashboard")
+st.set_page_config(
+    page_title="DataLens",
+    page_icon="🔍",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+st.sidebar.title("🔍 DataLens")
+st.sidebar.caption("Business Analytics Platform")
+
+st.sidebar.divider()
 
 page = st.sidebar.radio(
-    "Navigation",
+    "Navigate",
     [
-        "Upload Data",
-        "Data Cleaning",
-        "Visualisations",
-        "Insights",
-        "Reports",
-        "History",
+        "🏠 Dashboard",
+        "📤 Upload Data",
+        "🧹 Data Cleaning",
+        "📈 Visualisations",
+        "🧠 Insights",
+        "📄 Reports",
+        "📚 History",
     ],
 )
 
-if page == "Upload Data":
+if page == "🏠 Dashboard":
+    show_dashboard_page()
+
+elif page == "📤 Upload Data":
     show_upload_page()
 
-if st.session_state.datasets:
+elif not st.session_state.datasets:
+    st.info("👆 Please upload a dataset first.")
+
+else:
 
     dataset = st.selectbox(
         "Choose Dataset",
-        list(
-            st.session_state.datasets.keys()
-        ),
+        list(st.session_state.datasets.keys())
     )
 
     df = st.session_state.datasets[dataset]
@@ -83,8 +100,3 @@ if st.session_state.datasets:
 
     elif page == "History":
         show_history_page()
-
-else:
-    st.info(
-        "Upload a dataset to begin."
-    )
