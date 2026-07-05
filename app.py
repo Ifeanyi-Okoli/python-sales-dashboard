@@ -8,6 +8,7 @@ from utils.session_manager import (
 
 from views.dashboard_page import show_dashboard_page
 
+
 from views.upload_page import (
     show_upload_page
 )
@@ -32,6 +33,21 @@ from services.insights_service import generate_insights
 
 from views.history_page import show_history_page
 
+st.set_page_config(
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+
+.block-container{
+    padding-top:2rem;
+    padding-left:3rem;
+    padding-right:3rem;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 initialize_session()
 
@@ -43,6 +59,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
 
 st.sidebar.title("🔍 DataLens")
 st.sidebar.caption("Business Analytics Platform")
@@ -86,17 +103,17 @@ else:
         else df
     )
 
-    if page == "Data Cleaning":
+    if page == "🧹 Data Cleaning":
         show_cleaning_page(df)
 
-    elif page == "Visualisations":
+    elif page == "📈 Visualisations":
         show_visualisation_page(cleaned_df)
 
-    elif page == "Insights":
+    elif page == "🧠 Insights":
         show_insights_page(cleaned_df)
 
-    elif page == "Reports":
+    elif page == "📄 Reports":
         show_reports_page(cleaned_df)
 
-    elif page == "History":
+    elif page == "📚 History":
         show_history_page()
