@@ -134,15 +134,37 @@ def show_dashboard_page():
     
     st.divider()
 
-    st.subheader("Recent Uploads")
-    
+    st.subheader("📁 Recent Uploads")
+
     if history:
 
-        for item in history[:5]:
+        import pandas as pd
 
-            st.write(
-                f"📄 {item[1]}  •  {item[2]}"
-            )
+        recent_df = pd.DataFrame(
+            history,
+            columns=[
+                "ID",
+                "Filename",
+                "Upload Date",
+                "Rows",
+                "Columns"
+            ]
+        )
+
+        recent_df = recent_df[
+            [
+                "Filename",
+                "Upload Date",
+                "Rows",
+                "Columns"
+            ]
+        ]
+
+        st.dataframe(
+            recent_df,
+            use_container_width=True,
+            hide_index=True
+        )
 
     else:
 
