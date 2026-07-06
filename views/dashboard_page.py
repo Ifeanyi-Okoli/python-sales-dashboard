@@ -1,5 +1,9 @@
 import streamlit as st
 
+import pandas as pd
+
+import altair as alt
+
 from services.database_service import get_all_analyses
 
 from datetime import datetime
@@ -100,8 +104,9 @@ def show_dashboard_page():
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    import pandas as pd
   
+    st.subheader("📈 Upload Activity")
+
     if history:
 
         chart_df = pd.DataFrame(
@@ -119,17 +124,49 @@ def show_dashboard_page():
             chart_df["Upload Date"]
         )
 
-        uploads = (
+        activity_df = (
             chart_df
-            .groupby(chart_df["Upload Date"].dt.date)
+            .groupby(
+                chart_df["Upload Date"].dt.date
+            )
             .size()
+            .reset_index(name="Uploads")
         )
 
-        st.line_chart(uploads)
+
+        activity_chart = (
+            alt.Chart(activity_df)
+            .mark_line(
+                point=True
+            )
+            .encode(
+                x=alt.X(
+                    "Upload Date:T",
+                    title="Date"
+                ),
+
+                y=alt.Y(
+                    "Uploads:Q",
+                    title="Number of Uploads"
+                )
+            )
+            .properties(
+                height=300
+            )
+        )
+
+
+        st.altair_chart(
+            activity_chart,
+            use_container_width=True
+        )
+
 
     else:
 
-        st.info("No activity yet.")
+        st.info(
+            "No upload activity yet."
+        )
 
     
     st.divider()
@@ -138,7 +175,6 @@ def show_dashboard_page():
 
     if history:
 
-        import pandas as pd
 
         recent_df = pd.DataFrame(
             history,
