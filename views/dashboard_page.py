@@ -10,6 +10,8 @@ from datetime import datetime
 
 from components.metric_card import metric_card
 
+from components.action_card import action_card
+
 
 st.markdown("""
 <style>
@@ -23,6 +25,32 @@ st.markdown("""
 .subtitle{
     font-size:18px;
     color:gray;
+}
+
+
+div.stButton > button {
+
+    height:170px;
+    border-radius:18px;
+    background:white;
+    border:1px solid #E5E7EB;
+    box-shadow:0px 4px 12px rgba(0,0,0,0.08);
+
+    text-align:left;
+    padding:25px;
+
+    font-size:18px;
+    font-weight:600;
+
+    transition:0.3s;
+}
+
+
+div.stButton > button:hover {
+
+    transform:translateY(-5px);
+    box-shadow:0px 10px 25px rgba(0,0,0,0.15);
+    border-color:#1F4E79;
 }
 
 </style>
@@ -210,14 +238,41 @@ def show_dashboard_page():
 
     st.subheader("⚡ Quick Actions")
 
+
     col1, col2, col3 = st.columns(3)
 
+
     with col1:
-        if st.button("📤 Upload Dataset", use_container_width=True):
+
+        if action_card(
+            "📤",
+            "Upload Dataset",
+            "Import Excel or CSV files for analysis",
+            "upload_card"
+        ):
             st.session_state.page = "📤 Upload Data"
+            st.rerun()
+
 
     with col2:
-        st.button("🧹 Clean Data", use_container_width=True)
+
+        if action_card(
+            "🧹",
+            "Clean Data",
+            "Remove duplicates and prepare datasets",
+            "clean_card"
+        ):
+            st.session_state.page = "🧹 Data Cleaning"
+            st.rerun()
+
 
     with col3:
-        st.button("📈 Create Visualisation", use_container_width=True)
+
+        if action_card(
+            "📈",
+            "Visualise",
+            "Create charts and discover trends",
+            "visual_card"
+        ):
+            st.session_state.page = "📈 Visualisations"
+            st.rerun()

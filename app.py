@@ -8,6 +8,7 @@ from utils.session_manager import (
 
 from views.dashboard_page import show_dashboard_page
 
+from components.sidebar import sidebar
 
 from views.upload_page import (
     show_upload_page
@@ -33,9 +34,6 @@ from services.insights_service import generate_insights
 
 from views.history_page import show_history_page
 
-st.set_page_config(
-    layout="wide"
-)
 
 st.markdown("""
 <style>
@@ -61,23 +59,7 @@ st.set_page_config(
 )
 
 
-st.sidebar.title("🔍 DataLens")
-st.sidebar.caption("Business Analytics Platform")
-
-st.sidebar.divider()
-
-page = st.sidebar.radio(
-    "Navigate",
-    [
-        "🏠 Dashboard",
-        "📤 Upload Data",
-        "🧹 Data Cleaning",
-        "📈 Visualisations",
-        "🧠 Insights",
-        "📄 Reports",
-        "📚 History",
-    ],
-)
+page = sidebar()
 
 if page == "🏠 Dashboard":
     show_dashboard_page()
