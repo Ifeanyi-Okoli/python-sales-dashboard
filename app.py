@@ -32,6 +32,8 @@ from views.reports_page import (
 
 from services.insights_service import generate_insights
 
+from components.top_navbar import top_navbar
+
 from views.history_page import show_history_page
 
 
@@ -60,6 +62,8 @@ st.set_page_config(
 
 
 page = sidebar()
+
+top_navbar()
 
 if page == "🏠 Dashboard":
     show_dashboard_page()
