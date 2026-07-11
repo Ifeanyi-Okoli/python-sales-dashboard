@@ -3,112 +3,120 @@ import streamlit as st
 
 def top_navbar():
 
-    st.markdown(
-        """
-        <style>
+    # ---------- CSS ----------
+    st.markdown("""
+    <style>
 
-        .top-navbar {
+    .navbar-container{
+        background:white;
+        border:1px solid #E5E7EB;
+        border-radius:18px;
+        padding:14px 18px;
+        box-shadow:0 4px 15px rgba(0,0,0,.05);
+        margin-bottom:25px;
+    }
 
-            background:white;
+    div[data-testid="stTextInput"] input{
+        background:#F8FAFC;
+        border-radius:25px;
+        border:1px solid #E2E8F0;
+        height:46px;
+        padding-left:18px;
+        font-size:14px;
+    }
 
-            padding:15px 25px;
+    div[data-testid="stTextInput"] input:focus{
+        border:1px solid #2563EB;
+        box-shadow:none;
+    }
 
-            border-radius:18px;
+    div.stButton > button{
 
-            margin-bottom:30px;
+        width:42px;
+        height:42px;
 
-            display:flex;
+        border-radius:50%;
+        border:none;
 
-            justify-content:space-between;
+        background:#F1F5F9;
 
-            align-items:center;
+        font-size:18px;
 
-            border:1px solid #E5E7EB;
+        transition:.2s;
+    }
 
-            box-shadow:
-            0px 4px 15px rgba(0,0,0,0.05);
+    div.stButton > button:hover{
 
-        }
+        background:#DBEAFE;
 
+    }
 
-        .search-box {
+    .profile-chip{
 
-            background:#F1F5F9;
+        background:#1F4E79;
 
-            padding:10px 20px;
+        color:white;
 
-            border-radius:25px;
+        padding:10px 18px;
 
-            color:#6B7280;
+        border-radius:25px;
 
-            width:350px;
+        text-align:center;
 
-        }
+        font-weight:700;
 
+        font-size:14px;
+    }
 
-        .right-icons {
+    </style>
+    """, unsafe_allow_html=True)
 
-            display:flex;
+    # ---------- Navbar ----------
+    with st.container():
 
-            gap:20px;
+        st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 
-            align-items:center;
+        left, bell, settings, profile = st.columns(
+            [8, 0.6, 0.6, 1.2],
+            vertical_alignment="center"
+        )
 
-            font-size:20px;
+        with left:
 
-        }
+            st.text_input(
+                "",
+                placeholder="🔍 Search datasets, reports, insights...",
+                key="global_search",
+                label_visibility="collapsed",
+            )
 
+        with bell:
 
-        .profile {
+            st.button(
+                "🔔",
+                key="notification_button",
+                help="Notifications"
+            )
 
-            background:#1F4E79;
+        with settings:
 
-            color:white;
+            st.button(
+                "⚙️",
+                key="settings_button",
+                help="Settings"
+            )
 
-            padding:8px 15px;
+        with profile:
 
-            border-radius:20px;
-
-            font-size:14px;
-
-            font-weight:700;
-
-        }
-
-
-        </style>
-
-
-        <div class="top-navbar">
-
-
-            <div class="search-box">
-
-            🔍 Search analytics...
-
-            </div>
-
-
-
-            <div class="right-icons">
-
-                <div>🔔</div>
-
-                <div>⚙️</div>
-
-
-                <div class="profile">
-
-                👤 Ifeanyi
-
+            st.markdown(
+                """
+                <div class="profile-chip">
+                    👤 Ifeanyi
                 </div>
+                """,
+                unsafe_allow_html=True
+            )
 
+        st.markdown("</div>", unsafe_allow_html=True)
 
-            </div>
-
-
-        </div>
-
-        """,
-        unsafe_allow_html=True
-    )
+    return st.session_state.get("global_search", "")

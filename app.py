@@ -2,6 +2,8 @@ import streamlit as st
 
 from services.database_service import create_tables
 
+from components.top_navbar import top_navbar
+
 from utils.session_manager import (
     initialize_session
 )
@@ -32,7 +34,7 @@ from views.reports_page import (
 
 from services.insights_service import generate_insights
 
-from components.top_navbar import top_navbar
+
 
 from views.history_page import show_history_page
 
@@ -41,8 +43,11 @@ st.markdown("""
 <style>
 
 .block-container{
-    padding-top:2rem;
+
+    padding-top:1rem;
+
     padding-left:3rem;
+
     padding-right:3rem;
 }
 
@@ -63,7 +68,8 @@ st.set_page_config(
 
 page = sidebar()
 
-top_navbar()
+search_query = top_navbar()
+
 
 if page == "🏠 Dashboard":
     show_dashboard_page()

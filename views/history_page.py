@@ -25,3 +25,10 @@ def show_history_page():
     )
 
     st.dataframe(df, use_container_width=True)
+
+    search = st.session_state.get("global_search", "")
+
+    history_df = history_df[
+    history_df["Filename"]
+    .str.contains(search, case=False, na=False)
+]

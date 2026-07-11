@@ -66,25 +66,37 @@ def show_dashboard_page():
 
     total_rows = sum(item[3] for item in history)
 
-    st.markdown(
-    """
-    <div class="big-title">
-        🔍 DataLens
-    </div>
-    """,
-    unsafe_allow_html=True
-    )
+    st.markdown("""
+<div style="
+display:flex;
+align-items:center;
+gap:12px;
+">
+
+<span style="font-size:42px;">🏠</span>
+
+<span style="
+font-size:48px;
+font-weight:700;
+color:#1F4E79;
+">
+Dashboard
+</span>
+
+</div>
+""", unsafe_allow_html=True)
+
 
     st.markdown(
     """
     <div class="subtitle">
-        Business Analytics Platform
+        Analytics overview and workspace insights
     </div>
     """,
     unsafe_allow_html=True
     )
 
-    st.subheader("👋 Welcome back!")
+    st.subheader("👋 Welcome back, Ifeanyi")
 
     st.caption(
         "Here's a summary of your analytics workspace."
@@ -223,6 +235,15 @@ def show_dashboard_page():
                 "Columns"
             ]
         ]
+    search = st.session_state.get("global_search", "").lower()
+
+    if search:
+
+        recent_df = recent_df[
+            recent_df["Filename"]
+            .str.lower()
+            .str.contains(search)
+        ]
 
         st.dataframe(
             recent_df,
@@ -234,6 +255,7 @@ def show_dashboard_page():
 
         st.info("No uploads yet.")
 
+    
     st.divider()
 
     st.subheader("⚡ Quick Actions")
