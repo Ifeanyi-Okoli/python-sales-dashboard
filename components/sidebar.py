@@ -25,23 +25,23 @@ section[data-testid="stSidebar"] {
 
 
 .logo {
-    font-size:30px;
-    font-weight:800;
+    font-size:20px;
+    font-weight:700;
     color:#1F4E79;
+    margin-bottom:4px;
 }
-
 
 .subtitle {
     color:#6B7280;
-    font-size:13px;
-    margin-bottom:25px;
+    font-size:11px;
+    margin-bottom:20px;
 }
 
 
 .profile-card {
 
     background:white;
-    padding:18px;
+    padding:12px;
     border-radius:18px;
     margin-bottom:25px;
     text-align:center;
@@ -55,13 +55,13 @@ section[data-testid="stSidebar"] {
 
 
 .avatar {
-    font-size:35px;
+    font-size:28px;
 }
 
 
 .username {
 
-    font-size:18px;
+    font-size:16px;
     font-weight:800;
     margin-top:8px;
     color:#1F4E79;
@@ -71,7 +71,7 @@ section[data-testid="stSidebar"] {
 
 .role {
 
-    font-size:13px;
+    font-size:11px;
     color:#6B7280;
     margin-top:5px;
 
@@ -100,7 +100,7 @@ div[data-testid="stVerticalBlock"] {
 
 section[data-testid="stSidebar"] div.stButton > button {
 
-    height:45px !important;
+    height:38px !important;
 
     background:transparent;
 
@@ -108,9 +108,9 @@ section[data-testid="stSidebar"] div.stButton > button {
 
     text-align:left;
 
-    padding:8px 15px;
+    padding:6px 12px;
 
-    font-size:15px;
+    font-size:14px;
 
     font-weight:500;
 
@@ -269,13 +269,9 @@ unsafe_allow_html=True
             st.markdown(
 """
 <div class="status">
-
-🟢 System Online
-
-<br><br>
-
-Version: 1.0
-
+🟢 Online
+<br>
+v1.0
 </div>
 """,
 unsafe_allow_html=True
